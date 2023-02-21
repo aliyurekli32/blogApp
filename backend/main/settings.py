@@ -66,7 +66,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     #  'localhost:3000',
-     'www.test-cors.org',
+     'https://www.test-cors.org',
  ]
 
 CORS_ALLOW_CREDENTIALS = True

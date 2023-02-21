@@ -56,17 +56,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Cors Settings
-# CORS_ALLOWED_ORIGINS = [
-#     "https://localhost:3000",
-# ]
-
 CORS_ALLOWED_ORIGINS = [
-    "https://www.test-cors.org",
+    "https://localhost:3000",
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://www.test-cors.org",
+# ]
 
 CSRF_TRUSTED_ORIGINS = [
     #  'localhost:3000',
-     'https://www.test-cors.org',
+     "https://localhost:3000",
  ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -145,3 +145,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+
+}

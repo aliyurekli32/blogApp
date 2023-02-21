@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 from decouple import config
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'account',
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +60,16 @@ MIDDLEWARE = [
 #!!!!!!!
 AUTH_USER_MODEL ='account.User'
 #!!!!!!!
+
+#!SİMPLE JWT
+
+SIMPLE_JWT = {
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False
+}
+
+#!SİMPLE  JWT
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Cors Settings
 CORS_ALLOWED_ORIGINS = [

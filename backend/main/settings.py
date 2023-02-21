@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    # extra-apps
+    'account',
     'rest_framework',
     'corsheaders',
-    
 ]
 
 MIDDLEWARE = [
@@ -55,6 +54,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+#!!!!!!!
+AUTH_USER_MODEL ='account.User'
+#!!!!!!!
+
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  Cors Settings
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:3000",

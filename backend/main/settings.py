@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     
     # extra-apps
     'rest_framework',
+    'corsheaders',
     
 ]
 

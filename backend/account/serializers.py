@@ -32,7 +32,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email'],
             first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            last_name=validated_data['last_name'],
+            bio=validated_data['bio'],
+            image=validated_data['image'],
         )
 
         
@@ -81,7 +83,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email','bio','image',)
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True},
@@ -109,9 +111,11 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         instance.last_name = validated_data['last_name']
         instance.email = validated_data['email']
         instance.username = validated_data['username']
+        instance.bio = validated_data['bio']
+        instance.image = validated_data['image']
 
         instance.save()
 
         return instance
 
-        return instance
+

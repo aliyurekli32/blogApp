@@ -15,8 +15,7 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
-    
-
+                                           
 
 
 class ChangePasswordView(generics.UpdateAPIView):
@@ -57,3 +56,10 @@ class LogoutAllView(APIView):
             t, _ = BlacklistedToken.objects.get_or_create(token=token)
 
         return Response(status=status.HTTP_205_RESET_CONTENT)
+    
+
+class ProfileUser(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UpdateUserSerializer
+    def get_queryset(self):                                            # added string
+        return super().get_queryset().filter(pk=self.request.user.pk)   # added string

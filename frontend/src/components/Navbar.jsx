@@ -13,12 +13,16 @@ const Navbar = () => {
           "Content-type": "application/json; charset=UTF-8",
           "Authorization": `Bearer ${access}`
         },
+        body:JSON.stringify({
+          "refresh": refresh,
+       })
 
-      })
+      });
+
   }
 
 
-
+  console.log(refresh,access)
   return (
     <>
     {/* Navbar */}
@@ -48,7 +52,7 @@ const Navbar = () => {
       </ul>
       {/* Left links */}
       <div className="d-flex align-items-center">
-      <Link to={`/${refresh ? "logout" : "login"}`}>
+      <Link to={`/${refresh ? "" : "login"}`}>
 
         <button onClick={`${refresh ? ()=>handleLogout() : ""}`} type="button" className="btn btn-link px-3 me-2">
           {refresh ? "Logout" : "Login"}

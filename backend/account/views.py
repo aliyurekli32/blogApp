@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -40,7 +41,7 @@ class LogoutView(APIView):
 
     def post(self, request):
         try:
-            refresh_token = request.data["refresh_token"]
+            refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
 
@@ -51,12 +52,13 @@ class LogoutView(APIView):
         
 class LogoutAllView(APIView):
     permission_classes = (IsAuthenticated,)
-
+    
     def post(self, request):
         tokens = OutstandingToken.objects.filter(user_id=request.user.id)
         for token in tokens:
             t, _ = BlacklistedToken.objects.get_or_create(token=token)
-
+        BlacklistedToken.objects.filter(token__expires_at__lt=datetime.now()).delete()
+        OutstandingToken.objects.filter(expires_at__lt=datetime.now()).delete()
         return Response(status=status.HTTP_205_RESET_CONTENT)
     
 

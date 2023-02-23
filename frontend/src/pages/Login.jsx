@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { fetchLoginRegister } from "../helper/Functions"
+import { fetchLoginRegister, fetchUser } from "../helper/Functions"
 import { useDispatch, useSelector } from "react-redux"
 import { getUser } from "../store/slices/userSlice"
 
@@ -16,10 +16,12 @@ const Login = () => {
   
   const handleLogin =async()=>{
     const a =await fetchLoginRegister(loginData,"login");
-    console.log(a)
-    dispatch(getUser(a))
+    const b = await fetchUser(a);
+    const c= {...a,...b[0]}
+   
+    dispatch(getUser(c))
     
-    // dispatch(getUser())
+
   }
 
   

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { fetchLoginRegister } from "../helper/Functions"
 
 
-const Signup = () => {
+const UserUpdate = () => {
 
   const [signUpData, setSignUpData]=useState({
     username: "",
@@ -79,4 +79,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default UserUpdate

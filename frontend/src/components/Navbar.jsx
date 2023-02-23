@@ -1,7 +1,24 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const Navbar = () => {
+  const {refresh,access}=useSelector(state=>state.user)
+
+  const handleLogout=async()=>{
+      await fetch("http://127.0.0.1:8000/auth/logout/",{
+        method: "POST",
+        headers: 
+        {
+          "Content-type": "application/json; charset=UTF-8",
+          "Authorization": `Bearer ${access}`
+        },
+
+      })
+  }
+
+
+
   return (
     <>
     {/* Navbar */}
@@ -31,11 +48,12 @@ const Navbar = () => {
       </ul>
       {/* Left links */}
       <div className="d-flex align-items-center">
-      <Link to="/login">
-        <button type="button" className="btn btn-link px-3 me-2">
-          Login
+      <Link to={`/${refresh ? "logout" : "login"}`}>
+
+        <button onClick={`${refresh ? ()=>handleLogout() : ""}`} type="button" className="btn btn-link px-3 me-2">
+          {refresh ? "Logout" : "Login"}
         </button>
-        </Link>
+      </Link>
         <Link to="/signup">
         <button type="button" className="btn btn-primary me-3">
           Sign up for free

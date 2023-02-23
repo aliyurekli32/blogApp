@@ -28,7 +28,7 @@ const Signup = () => {
                 <p className="text-white-50 mb-5">Please enter your login and password!</p>
                 <div className="form-outline form-white mb-4">
                   <input onChange={(e)=>setSignUpData({...signUpData,username: e.target.value})} value={signUpData.username} type="text" id="typeUserX" className="form-control form-control-lg border mb-4" />
-                  <label className="form-label " htmlFor="typeUserX">Username</label>
+                  <label className="form-label " htmlFor="typeUserX">{ signUpData.username ? "" : "Username" }</label>
                 </div>
                 <div className="form-outline form-white mb-4">
                   <input onChange={(e)=>setSignUpData({...signUpData,first_name: e.target.value})} value={signUpData.first_name} type="text" id="typeFirstNameX" className="form-control form-control-lg border mb-4" />

@@ -1,7 +1,11 @@
 import React from 'react'
 import { MDBCol, MDBContainer, MDBRow, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBBtn, MDBTypography } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const MyProfile = () => {
+  const data=useSelector(state=>state.user)
+
+  console.log(data)
   return (
     <>
     <div className="gradient-custom-2" style={{ backgroundColor: '#9de2ff' }}>
@@ -21,8 +25,8 @@ const MyProfile = () => {
                   
                 </div>
                 <div className="ms-3" style={{ marginTop: '130px' }}>
-                  <MDBTypography tag="h5">Andy Horwitz</MDBTypography>
-                  <MDBCardText>New York</MDBCardText>
+                  <MDBTypography tag="h5">{data.username}</MDBTypography>
+                  <MDBCardText>{data.first_name}{data.lasta_name}</MDBCardText>
                 </div>
               </div>
               <div className="p-4 text-black" style={{ backgroundColor: '#f8f9fa' }}>
@@ -45,13 +49,12 @@ const MyProfile = () => {
                 <div className="mb-5">
                   <p className="lead fw-normal mb-1">About</p>
                   <div className="p-4" style={{ backgroundColor: '#f8f9fa' }}>
-                    <MDBCardText className="font-italic mb-1">Web Developer</MDBCardText>
-                    <MDBCardText className="font-italic mb-1">Lives in New York</MDBCardText>
-                    <MDBCardText className="font-italic mb-0">Photographer</MDBCardText>
+                    <MDBCardText className="font-italic mb-1">{data.bio}</MDBCardText>
+                   
                   </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                  <MDBCardText className="lead fw-normal mb-0">Recent photos</MDBCardText>
+                  <MDBCardText className="lead fw-normal mb-0">Recent Blogs</MDBCardText>
                   <MDBCardText className="mb-0"><a href="#!" className="text-muted">Show all</a></MDBCardText>
                 </div>
                 <MDBRow>

@@ -3,13 +3,14 @@
 export const fetchLoginRegister=async(data,type)=>{
     const urlRegister="http://127.0.0.1:8000/auth/register/";
     const urlLogin="http://127.0.0.1:8000/auth/login/";
-    const url = type=="login" ? urlLogin : urlRegister;
+    const urlUpdate=`http://127.0.0.1:8000/auth/update_profile/${data?.id}/`;
+    const url = type=="login" ? urlLogin : type=="register" ? urlRegister : urlUpdate;
     try {
     
     const accessData=await fetch(url, {
      
     // Adding method type
-    method: "POST",
+    method: type!=="update" ? "POST" : "PUT",
      
     // Adding body or contents to send
     body: type=="login" ? JSON.stringify({
@@ -31,15 +32,23 @@ export const fetchLoginRegister=async(data,type)=>{
      ,
      
     // Adding headers to the request
-    headers: {
+   
+    
+    headers: type !=="update" ? {
         "Content-type": "application/json; charset=UTF-8"
+    } 
+    : 
+    {
+        "Content-type": "application/json; charset=UTF-8",
+        "Authorization": `Bearer ${data.access}`
     }
+    
 })
  
 // Converting to JSON
 .then(response => response.json());
 
-if(type=="login") return accessData;
+if(type=="login" || type=="update" ) return accessData;
  
 // Displaying results to console
 

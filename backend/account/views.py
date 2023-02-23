@@ -29,6 +29,8 @@ class UpdateProfileView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
     serializer_class = UpdateUserSerializer
+    def get_queryset(self):                                            # added string
+        return super().get_queryset().filter(pk=self.request.user.pk)   # added string
     
 
 

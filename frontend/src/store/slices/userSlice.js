@@ -3,6 +3,7 @@ import {createSlice} from "@reduxjs/toolkit"
 const userSlice=createSlice({
     name: "user",
     initialState: {
+        id:"",
         refresh:"",
         access:"",
         username:"",
@@ -15,6 +16,7 @@ const userSlice=createSlice({
     },
     reducers:{
         getUser: (state,action)=>{
+            state.id=action.payload?.id || state.id
             state.username=action.payload?.username || state.username
             state.access=action.payload?.access || state.access
             state.refresh=action.payload?.refresh || state.refresh
@@ -25,6 +27,7 @@ const userSlice=createSlice({
             state.image=action.payload?.image || state.image
         },
         logoutUser: (state)=>{
+            state.id=""
             state.username=""
             state.access=""
             state.refresh=""

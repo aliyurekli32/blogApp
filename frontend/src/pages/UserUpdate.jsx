@@ -1,20 +1,27 @@
 import { useState } from "react"
 import { fetchLoginRegister } from "../helper/Functions"
+import { useDispatch, useSelector } from "react-redux"
+import { getUser } from "../store/slices/userSlice"
 
 
 const UserUpdate = () => {
-
+  const userData=useSelector(state=>state.user)
+  const dispatch=useDispatch()
   const [signUpData, setSignUpData]=useState({
-    username: "",
-    password: "",
-    password2: "",
-    email: "",
-    first_name: "",
-    last_name: "",
-    bio: "",
-    image:"",
+    access: userData.access,
+    id: userData.id,
+    username: userData.username,
+    email: userData.email,
+    first_name: userData.first_name,
+    last_name: userData.last_name,
+    bio: userData.bio,
+    image:userData.image,
     })
 
+    const handleUpdate=async()=>{
+      const a = await fetchLoginRegister(signUpData,"update");
+      dispatch(getUser(a))
+    }
 
   return (
     <><section className="h-100 gradient-custom">
@@ -43,14 +50,6 @@ const UserUpdate = () => {
                   <label className="form-label " htmlFor="typeEmailX">Email</label>
                 </div>
                 <div className="form-outline form-white mb-4">
-                  <input onChange={(e)=>setSignUpData({...signUpData,password: e.target.value})} value={signUpData.password} type="password" id="typePasswordX1" className="form-control form-control-lg border" />
-                  <label className="form-label" htmlFor="typePasswordX1">Password</label>
-                </div>
-                <div className="form-outline form-white mb-4">
-                  <input onChange={(e)=>setSignUpData({...signUpData,password2: e.target.value})} value={signUpData.password2} type="password" id="typePasswordX2" className="form-control form-control-lg border" />
-                  <label className="form-label" htmlFor="typePasswordX2">Password2</label>
-                </div>
-                <div className="form-outline form-white mb-4">
                   <input onChange={(e)=>setSignUpData({...signUpData,image: e.target.value})} value={signUpData.image} type="text" id="typeImageX" className="form-control form-control-lg border mb-4" />
                   <label className="form-label " htmlFor="typeImageX">Image</label>
                 </div>
@@ -59,7 +58,7 @@ const UserUpdate = () => {
                   <label className="form-label " htmlFor="typeBioX">Bio</label>
                 </div>
                 <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
-                <button onClick={()=>fetchLoginRegister(signUpData,"register")} className="btn btn-outline-light btn-lg px-5" type="submit">Signup</button>
+                <button onClick={()=>handleUpdate()} className="btn btn-outline-light btn-lg px-5" type="submit">Update</button>
                 <div className="d-flex justify-content-center text-center mt-4 pt-1">
                   <a href="#!" className="text-white"><i className="fab fa-facebook-f fa-lg" /></a>
                   <a href="#!" className="text-white"><i className="fab fa-twitter fa-lg mx-4 px-2" /></a>

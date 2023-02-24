@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 const MyProfile = () => {
   const data=useSelector(state=>state.user)
 
-  console.log(data)
+
   return (
     <>
     <div className="gradient-custom-2" style={{ backgroundColor: '#9de2ff' }}>
@@ -20,6 +20,11 @@ const MyProfile = () => {
                   <Link to="/updateprofile">
                   <MDBBtn outline color="dark" style={{height: '36px', overflow: 'visible'}}>
                     Edit profile
+                  </MDBBtn>
+                  </Link>
+                  <Link to="/updatepassword">
+                  <MDBBtn outline color="dark" style={{height: '72px', overflow: 'visible'}}>
+                    Update Password
                   </MDBBtn>
                   </Link>
                   

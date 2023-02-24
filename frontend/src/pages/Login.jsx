@@ -2,12 +2,14 @@ import { useState } from "react"
 import { fetchLoginRegister, fetchUser } from "../helper/Functions"
 import { useDispatch, useSelector } from "react-redux"
 import { getUser } from "../store/slices/userSlice"
+import { useNavigate } from "react-router-dom"
 
 
 
 const Login = () => {
   const dispatch=useDispatch()
   const data=useSelector(state=>state.user)
+  const navigate=useNavigate()
 
   const [loginData, setLoginData]=useState({
   username: "",
@@ -20,13 +22,16 @@ const Login = () => {
     const c= {...a,...b[0]}
    
     dispatch(getUser(c))
-    
+    setLoginData({
+      username: "",
+      password: ""
+    })
+    navigate("/")
 
   }
 
   
 
-  console.log(data)
   return (
     <>
     <section className="vh-100 gradient-custom">

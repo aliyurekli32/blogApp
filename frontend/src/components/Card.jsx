@@ -2,6 +2,7 @@ import React from 'react'
 
 const Card = (props) => {
     const {post}=props
+    console.log(post)
   return (
     <>
      <div className="col-lg-4 col-md-6 mb-4">
@@ -9,7 +10,8 @@ const Card = (props) => {
           <div className="view overlay">
             <img
               className="card-img-top"
-              src={post?.image_url}
+              style={{height:"200px"}}
+              src={post?.image}
               alt={post?.title}
             />
             <a href="#!">
@@ -18,7 +20,7 @@ const Card = (props) => {
           </div>
           <div className="card-body">
             <h4 className="card-title">{post?.title}</h4>
-            <p className="card-text">{post?.summary}</p>
+            <p className="card-text">{post?.category_name}</p>
             <a href={`/blog/${post?.id}`} className="btn btn-primary">
               Read more
             </a>

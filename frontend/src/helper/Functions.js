@@ -133,3 +133,7 @@ export const createBlog=async(data)=>{
 
     
 }
+export const getBlog=async()=>{
+  const data=  await fetch("http://127.0.0.1:8000/api/blogs/").then(res=>res.json()).then(data=>data);
+  return data
+}

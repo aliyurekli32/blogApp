@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '../components/Card';
+import { getBlog } from '../helper/Functions';
 
-const Home = (props) => {
-  const {posts}=props
+const Home = () => {
+ const [posts,setPosts]=useState([])
+  useEffect(()=>{
+   getBlog().then(data=>setPosts(data))
+
+  },[])
+
+console.log(posts)
+  
   return (
     <div className="container mt-4">
       <div className="row">

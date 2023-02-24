@@ -3,16 +3,16 @@ import { MDBInput, MDBBtn } from 'mdb-react-ui-kit'; // import mdbootstrap input
 
 const CreateBlogCard = () => {
   const [title, setTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
+  const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageAlt, setImageAlt] = useState("");
+  const [image, setImage] = useState("");
 
+ // title, content, image, category , 
   const handleSubmit = (e) => {
     e.preventDefault();
     // handle form submission here
   };
-
+  console.log(category)
   return (
     <div className="container d-flex justify-content-center align-items-center">
         <form onSubmit={handleSubmit}>
@@ -24,13 +24,10 @@ const CreateBlogCard = () => {
           onChange={(e) => setTitle(e.target.value)}
           required
         />
-        <MDBInput
-          label="Subtitle"
-          type="text"
-          value={subtitle}
-          onChange={(e) => setSubtitle(e.target.value)}
-          required
-        />
+        <select onChange={(e)=>setCategory(e.target.value)} class="form-select" aria-label="Default select example">
+          <option value={"Zero"}>Zero</option> 
+          <option value={"One"}>One</option> 
+        </select>
         <MDBInput
           label="Content"
           type="textarea"
@@ -42,17 +39,11 @@ const CreateBlogCard = () => {
         <MDBInput
           label="Image URL"
           type="url"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
           required
         />
-        <MDBInput
-          label="Image Alt Text"
-          type="text"
-          value={imageAlt}
-          onChange={(e) => setImageAlt(e.target.value)}
-          required
-        />
+       
         <MDBBtn variant="primary" type="submit">
           Create Blog Card
         </MDBBtn>

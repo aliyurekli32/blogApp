@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Category, Blog, Comment, Likes, PostViews
-from .serializers import CategorySerializer, BlogSerializer, CommentSerializer, LikesSerializer, PostViewsSerializer
+from .serializers import CategorySerializer, BlogSerializer, CommentSerializer, LikesSerializer, PostViewsSerializer, UserBlogSerializer
 from rest_framework.viewsets import ModelViewSet
 from .permissions import IsStaffOrReadOnly, IsOwnerOrReadOnly, IsOwnerOrReadOnlyComment
 from rest_framework.response import Response
@@ -19,7 +19,7 @@ class CategoryView(ModelViewSet):
 class BlogView(ModelViewSet):
     
     queryset = Blog.objects.all()
-    serializer_class = BlogSerializer
+    serializer_class = UserBlogSerializer
     permission_classes = [IsOwnerOrReadOnly]  # Bloglarda get işlemini login olan her kullanıcı yapabilecek update ve delete işlemlerini yalnızca blog sahibi yapabilecek
     
     def perform_create(self, serializer):
@@ -35,11 +35,20 @@ class BlogView(ModelViewSet):
     #     serializer.save()
 
     def get_queryset(self):
+        
         if self.request.user.is_staff:
            return super().get_queryset()
+        if super().get_queryset().filter(author = self.request.user.id) :
+            return super().get_queryset()
         else:
             return super().get_queryset().filter(status='p')  # sadece yayın statusu public olan blogları yayınla
 
+    def get_serializer_class(self):
+        serializer = super().get_serializer_class()
+        if self.request.user.is_staff:
+            return BlogSerializer
+        return serializer
+    
     #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # # TEK KULLAN
     
@@ -56,17 +65,21 @@ class CommentView(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsOwnerOrReadOnlyComment]  # her kullanıcı kendi yorumunu düzenleyebilecek herkesin yorumunu görüntüleyebilecek
-
+    def perform_create(self, serializer):
+       serializer.save(user=serializer.context['request'].user)
 class LikesView(ModelViewSet):
 
-    queryset = Likes.objects.all()
+    queryset = Likes.objects.filter(likes = True)
     serializer_class = LikesSerializer
-
-    def get_queryset(self):
-        if Likes.objects.filter(likes = False):
-           obj = Likes.objects.filter(likes = False).delete()
-           obj.save()
-        return obj
+    
+    def perform_create(self, serializer):
+       serializer.save(user=serializer.context['request'].user)
+       
+    # def get_queryset(self):
+    #     if Likes.objects.filter(likes = False):
+    #        obj = Likes.objects.filter(likes = False).delete()
+    #        obj.save()
+    #     return obj
     
 class PostViewSet(ModelViewSet):
     queryset = PostViews.objects.all()

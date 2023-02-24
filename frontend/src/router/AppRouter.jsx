@@ -10,6 +10,7 @@ import UserUpdate from '../pages/UserUpdate'
 import PasswordUpdate from '../pages/PasswordUpdate'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import CreateBlogCard from '../pages/CreateBlogCard'
 
 
 const AppRouter = () => {
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Route path='/signup' element={<Signup/>} />
         <Route path='/' element={<Home/>} />
         <Route path='' element={<PrivateRouter/>}>
+            <Route path='/createblog' element={<CreateBlogCard/>}/>
             <Route path='/details' element={<Details/>} />
             <Route path='/profile' element={<MyProfile/>} />
             <Route path='/updateprofile' element={<UserUpdate/>} />

@@ -24,7 +24,7 @@ const AppRouter = () => {
             <Route path='/details' element={<Details/>} />
             <Route path='/profile' element={<MyProfile/>} />
             <Route path='/updateprofile' element={<UserUpdate/>} />
-            <Route path='/resetpassword' element={<PasswordUpdate/>} />
+            <Route path='/updatepassword' element={<PasswordUpdate/>} />
         </Route>
     </Routes>
     <Footer/>

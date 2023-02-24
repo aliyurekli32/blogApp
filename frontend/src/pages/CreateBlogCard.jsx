@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { MDBInput, MDBBtn } from 'mdb-react-ui-kit'; // import mdbootstrap input component
 import { createBlog, getCategory } from "../helper/Functions";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlogCard = () => {
+  const navigate=useNavigate()
   const {access}=useSelector(state=>state.user);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState([]);
@@ -36,7 +38,7 @@ const CreateBlogCard = () => {
     }
     // handle form submission here
     await createBlog(data)
-
+    navigate("/")
 
   };
 console.log(selectedCat)

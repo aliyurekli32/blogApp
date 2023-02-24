@@ -103,4 +103,33 @@ export const passUpdate=async(data)=>{
     }
 }
 
+export const getCategory=async()=>{
+    try {
+     const data =await fetch("http://127.0.0.1:8000/api/categories/").then(res=>res.json()).then(data=>data)
+     return data
+    } catch (error) {
+        console.log(error)
+    }
 
+    
+}
+
+export const createBlog=async(data)=>{
+    const url="http://127.0.0.1:8000/api/blogs/"
+
+    try {
+      const dataBlog=  await fetch(url,{
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${data.access}`
+            }
+        }).then(res=>res.json()).then(data=>console.log(data));
+        return dataBlog
+    } catch (error) {
+        
+    }
+
+    
+}

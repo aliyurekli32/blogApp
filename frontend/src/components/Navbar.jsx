@@ -60,13 +60,19 @@ const Navbar = () => {
       </Link>
         <Link to="/signup">
         <button type="button" className="btn btn-primary me-3">
-          Sign up for free
+          Sign up
           
         </button>
         </Link>
         <Link to="/profile">
         <button type="button" className="btn btn-primary me-3 rounded">
           Profile
+          
+        </button>
+        </Link>
+        <Link to="/createblog">
+        <button type="button" className="btn btn-primary me-3">
+          Create Blog
           
         </button>
         </Link>

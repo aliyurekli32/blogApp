@@ -1,10 +1,8 @@
 import { useState } from "react"
 import { fetchLoginRegister } from "../helper/Functions"
+import { useNavigate } from "react-router-dom"
 
-
-const Signup = () => {
-
-  const [signUpData, setSignUpData]=useState({
+const initValues = {
     username: "",
     password: "",
     password2: "",
@@ -13,7 +11,12 @@ const Signup = () => {
     last_name: "",
     bio: "",
     image:"",
-    })
+    
+}
+
+const Signup = () => {
+  const navigate=useNavigate()
+  const [signUpData, setSignUpData]=useState(initValues)
 
 
   return (
@@ -59,7 +62,7 @@ const Signup = () => {
                   <label className="form-label " htmlFor="typeBioX">Bio</label>
                 </div>
                 <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
-                <button onClick={()=>fetchLoginRegister(signUpData,"register")} className="btn btn-outline-light btn-lg px-5" type="submit">Signup</button>
+                <button onClick={()=>{fetchLoginRegister(signUpData,"register");navigate("/login");setSignUpData(initValues)}} className="btn btn-outline-light btn-lg px-5" type="submit">Signup</button>
                 
                 <div className="d-flex justify-content-center text-center mt-4 pt-1">
                   <a href="#!" className="text-white"><i className="fab fa-facebook-f fa-lg" /></a>

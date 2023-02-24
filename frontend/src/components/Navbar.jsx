@@ -22,7 +22,7 @@ const Navbar = () => {
   }
 
 
-  console.log(refresh,access)
+
   return (
     <>
     {/* Navbar */}

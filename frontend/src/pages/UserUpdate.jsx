@@ -2,11 +2,13 @@ import { useState } from "react"
 import { fetchLoginRegister } from "../helper/Functions"
 import { useDispatch, useSelector } from "react-redux"
 import { getUser } from "../store/slices/userSlice"
+import { useNavigate } from "react-router-dom"
 
 
 const UserUpdate = () => {
   const userData=useSelector(state=>state.user)
   const dispatch=useDispatch()
+  const navigate=useNavigate()
   const [signUpData, setSignUpData]=useState({
     access: userData.access,
     id: userData.id,
@@ -20,7 +22,8 @@ const UserUpdate = () => {
 
     const handleUpdate=async()=>{
       const a = await fetchLoginRegister(signUpData,"update");
-      dispatch(getUser(a))
+      dispatch(getUser(a));
+      navigate("/")
     }
 
   return (

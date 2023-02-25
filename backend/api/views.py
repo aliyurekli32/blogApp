@@ -4,7 +4,7 @@ from .serializers import CategorySerializer, BlogSerializer, CommentSerializer, 
 from rest_framework.viewsets import ModelViewSet
 from .permissions import IsStaffOrReadOnly, IsOwnerOrReadOnly, IsOwnerOrReadOnlyComment
 from rest_framework.response import Response
-
+from rest_framework import status
 
 
 # Create your views here.
@@ -73,6 +73,17 @@ class LikesView(ModelViewSet):
     
     def perform_create(self, serializer):
        serializer.save(user=serializer.context['request'].user)
+       
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        data = {
+            "message":"Likes successfully deleted"
+        }
+        return Response(data,status=status.HTTP_204_NO_CONTENT)
+
+    def perform_destroy(self, instance):
+        instance.delete()
        
     # def get_queryset(self):
     #     if Likes.objects.filter(likes = False):

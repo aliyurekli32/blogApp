@@ -50,7 +50,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
     comment_count = serializers.SerializerMethodField()
     author = serializers.StringRelatedField()
-    # author_id = serializers.IntegerField(read_only = True)
+    author_id = serializers.IntegerField(read_only = True)
     comments = CommentSerializer(many = True, read_only = True)
     category_name = serializers.SerializerMethodField()
     likes_n = LikesSerializer(many = True, read_only = True)
@@ -66,7 +66,7 @@ class BlogSerializer(serializers.ModelSerializer):
             'category',
             'publish_date',
             'author',
-            # 'author_id',
+            'author_id',
             'status',  # sadece admin yapabilecek
             'slug',
             'comments',
@@ -103,7 +103,7 @@ class UserBlogSerializer(serializers.ModelSerializer):
 
     comment_count = serializers.SerializerMethodField()
     author = serializers.StringRelatedField()
-    # author_id = serializers.IntegerField(read_only = True)
+    author_id = serializers.IntegerField(read_only = True)
     comments = CommentSerializer(many = True, read_only = True)
     category_name = serializers.SerializerMethodField()
     likes_n = LikesSerializer(many = True, read_only = True)
@@ -119,7 +119,7 @@ class UserBlogSerializer(serializers.ModelSerializer):
             'category',
             'publish_date',
             'author',
-            # 'author_id',
+            'author_id',
             'status',  # sadece admin yapabilecek
             'comments',
             'category_name',

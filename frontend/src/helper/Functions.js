@@ -72,6 +72,7 @@ export const fetchUser=async(a)=>{
             "Authorization": `Bearer ${a.access}`
         }
     }).then(response=>response.json());
+    console.log(userData)
 
     return userData;
     } catch (error) {
@@ -143,25 +144,32 @@ export const sendLikeOrDelete=async(data)=>{
     const urlLike="http://127.0.0.1:8000/api/likes/";
     const urlLikeDelete=`http://127.0.0.1:8000/api/likes/${data?.likes_id}/`
     const url = !data?.likes_id ? urlLike : urlLikeDelete ;
-    const datal=await fetch(url,{
-        method: !data?.likes_id ? "POST" : "DELETE",
-        body: !data?.likes_id ?
-         JSON.stringify({
-            "user_id": data.user_id,
-            "post_id": data.post_id,
-            "likes": true
-        }) 
-        
-        :
-        JSON.stringify({
-          
+    if (!data?.likes_id){
+        const datal=await fetch(urlLike,{
+            method: "POST" ,
+            body: 
+             JSON.stringify({
+                "user_id": data.user_id,
+                "post_id": data.post_id,
+                "likes": true
+            }) 
+            ,
+            headers:  {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${data.access}`
+            }
+        }).then(res=>res.json()).then(dataL=>console.log(dataL))
+    
+        return datal
+    }else{
+        await fetch(urlLikeDelete,{
+            method: "DELETE",
+            headers:  {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": `Bearer ${data.access}`
+            }
         })
-        ,
-        headers:  {
-            "Content-type": "application/json; charset=UTF-8",
-            "Authorization": `Bearer ${data.access}`
-        }
-    }).then(res=>res.json()).then(dataL=>console.log(dataL))
+    }
 
-    return datal
+    
 }

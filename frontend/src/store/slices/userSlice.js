@@ -12,7 +12,8 @@ const userSlice=createSlice({
         email:"",
         bio:"",
         image:"",
-        action: true
+        superA: false,
+        action: 0
     },
     reducers:{
         getUser: (state,action)=>{
@@ -24,6 +25,7 @@ const userSlice=createSlice({
             state.last_name=action.payload?.last_name || state.last_name
             state.email=action.payload?.email || state.email
             state.bio=action.payload?.bio || state.bio
+            state.superA=action.payload?.is_superuser || state.superA
             state.image=action.payload?.image || state.image
 
         },
@@ -37,10 +39,11 @@ const userSlice=createSlice({
             state.email=""
             state.bio=""
             state.image=""
+            state.superA=false
         },
         actionGet: (state)=>{
             console.log(state.action)
-            state.action=!state.action
+            state.action = state.action + 1
         },
     
     }

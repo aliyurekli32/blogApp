@@ -2,6 +2,7 @@ import React from 'react'
 import { sendLikeOrDelete } from '../helper/Functions'
 import { useDispatch, useSelector } from 'react-redux'
 import { actionGet } from '../store/slices/userSlice'
+import { Link } from 'react-router-dom'
 
 const Card = (props) => {
     const {post}=props
@@ -16,7 +17,8 @@ const Card = (props) => {
     await sendLikeOrDelete({
       likes_id: post?.likes_n?.filter(item=> item.user_id==id)[0]?.id,
       access: access
-    }).then(res=>dispatch(actionGet()))
+    }).then(res=>res)
+    dispatch(actionGet())
     
    }else{
     console.log('filternone')
@@ -25,7 +27,8 @@ const Card = (props) => {
       post_id: post.id,
       user_id: id,
       access: access
-    }).then(res=>dispatch(actionGet()))
+    }).then(res=>res)
+    dispatch(actionGet())
     
 
    }
@@ -49,16 +52,26 @@ const Card = (props) => {
           <div className="card-body">
             <h4 className="card-title">{post?.title}</h4>
             <p className="card-text">{post?.category_name}</p>
-            
-            <a href={`/blog/${post?.id}`}  className="btn btn-primary">
-              Read more
-            </a>
+            <p className="card-text">{post?.content.slice(0,50)}...</p>
+            <Link onClick={()=>{}} to={`/details/${post?.id}`}>
+            <button className="btn btn-primary">Read More</button>
+            </Link>
+           
             <div className='d-flex justify-content-between align-items-center mt-4'>
-              <div onClick={()=>senT()} ><i   class="fas fa-thumbs-up fa-lg text-danger"></i></div>
+              <div>
+                <i  onClick={()=>senT()} class="cursor fas fa-thumbs-up fa-lg text-danger me-1"></i>
+                <span>{post.likes}</span>
+                </div>
               <div className='d-flex justify-content-between align-items-center gap-2' >
-              <div><i class="far fa-comment fa-lg text-danger"></i></div>
+              <div>
+                <i class="far fa-comment fa-lg text-danger me-1"></i>
+                <span>{post.comment_count}</span> 
+              </div>
               
-              <div><i class="far fa-eye fa-lg text-danger"></i></div>
+              <div>
+                <i class="far fa-eye fa-lg text-danger me-1"></i>
+                <span>{post.post_views}</span>
+              </div>
               </div>
               
             </div>

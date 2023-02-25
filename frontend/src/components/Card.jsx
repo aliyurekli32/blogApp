@@ -1,10 +1,12 @@
 import React from 'react'
-import { sendLikeOrDelete } from '../helper/Functions'
+import { postView, sendLikeOrDelete } from '../helper/Functions'
 import { useDispatch, useSelector } from 'react-redux'
 import { actionGet } from '../store/slices/userSlice'
 import { Link } from 'react-router-dom'
 
 const Card = (props) => {
+    
+   
     const {post}=props
     const {id,access}=useSelector(state=> state.user)
     const dispatch=useDispatch()
@@ -33,7 +35,16 @@ const Card = (props) => {
 
    }
       
-  }  
+  } 
+  const dataView={
+    access: access,
+    user_id: id,
+    post_id: post.id
+  }
+  const handleView=async()=>{
+      await postView(dataView).then(res=>res)
+      dispatch(actionGet())
+  }
   return (
     <>
      <div className="col-lg-4 col-md-6 mb-4 ">
@@ -53,7 +64,7 @@ const Card = (props) => {
             <h4 className="card-title">{post?.title}</h4>
             <p className="card-text">{post?.category_name}</p>
             <p className="card-text">{post?.content.slice(0,50)}...</p>
-            <Link onClick={()=>{}} to={`/details/${post?.id}`}>
+            <Link onClick={()=>{handleView()}} to={`/details/${post?.id}`}>
             <button className="btn btn-primary">Read More</button>
             </Link>
            

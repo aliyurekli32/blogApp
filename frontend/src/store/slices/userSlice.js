@@ -11,8 +11,8 @@ const userSlice=createSlice({
         last_name:"",
         email:"",
         bio:"",
-        image:""
-
+        image:"",
+        action: true
     },
     reducers:{
         getUser: (state,action)=>{
@@ -25,6 +25,7 @@ const userSlice=createSlice({
             state.email=action.payload?.email || state.email
             state.bio=action.payload?.bio || state.bio
             state.image=action.payload?.image || state.image
+
         },
         logoutUser: (state)=>{
             state.id=""
@@ -36,10 +37,14 @@ const userSlice=createSlice({
             state.email=""
             state.bio=""
             state.image=""
-        }
+        },
+        actionGet: (state)=>{
+            console.log(state.action)
+            state.action=!state.action
+        },
     
     }
 })
 
-export const {getUser,logoutUser}=userSlice.actions;
+export const {actionGet,getUser,logoutUser}=userSlice.actions;
 export default userSlice.reducer;

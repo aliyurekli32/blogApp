@@ -137,3 +137,31 @@ export const getBlog=async()=>{
   const data=  await fetch("http://127.0.0.1:8000/api/blogs/").then(res=>res.json()).then(data=>data);
   return data
 }
+
+export const sendLikeOrDelete=async(data)=>{
+    console.log(data)
+    const urlLike="http://127.0.0.1:8000/api/likes/";
+    const urlLikeDelete=`http://127.0.0.1:8000/api/likes/${data?.likes_id}/`
+    const url = !data?.likes_id ? urlLike : urlLikeDelete ;
+    const datal=await fetch(url,{
+        method: !data?.likes_id ? "POST" : "DELETE",
+        body: !data?.likes_id ?
+         JSON.stringify({
+            "user_id": data.user_id,
+            "post_id": data.post_id,
+            "likes": true
+        }) 
+        
+        :
+        JSON.stringify({
+          
+        })
+        ,
+        headers:  {
+            "Content-type": "application/json; charset=UTF-8",
+            "Authorization": `Bearer ${data.access}`
+        }
+    }).then(res=>res.json()).then(dataL=>console.log(dataL))
+
+    return datal
+}

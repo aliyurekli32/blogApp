@@ -15,15 +15,15 @@ const CreateBlogCard = () => {
 
  
 
-  useEffect(() => {
- 
-  getCategory().then(res=>setCategory(res))
-
-
+      useEffect(() => {
     
-    
+      getCategory().then(res=>setCategory(res))
 
-  }, [])
+
+        
+        
+
+      }, [])
   
 
  // title, content, image, category , 
@@ -41,7 +41,7 @@ const CreateBlogCard = () => {
     navigate("/")
 
   };
-console.log(selectedCat)
+
   return (
     <div className="container d-flex justify-content-center align-items-center">
         <form onSubmit={handleSubmit}>

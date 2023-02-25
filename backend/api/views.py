@@ -68,7 +68,6 @@ class CommentView(ModelViewSet):
     def perform_create(self, serializer):
        serializer.save(user=serializer.context['request'].user)
 class LikesView(ModelViewSet):
-
     queryset = Likes.objects.filter(likes = True)
     serializer_class = LikesSerializer
     

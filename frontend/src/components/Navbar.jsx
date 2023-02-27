@@ -6,7 +6,7 @@ const Navbar = () => {
   const {refresh,access}=useSelector(state=>state.user)
 
   const handleLogout=async()=>{
-      await fetch("http://127.0.0.1:8000/auth/logout/",{
+      await fetch("http://127.0.0.1:8000/auth/logout_all/",{
         method: "POST",
         headers: 
         {
@@ -18,6 +18,7 @@ const Navbar = () => {
        })
 
       });
+      console.log("logout çalıştı")
 
   }
 
@@ -52,12 +53,19 @@ const Navbar = () => {
       </ul>
       {/* Left links */}
       <div className="d-flex align-items-center">
-      <Link to={`/${refresh ? "" : "login"}`}>
-
-        <button onClick={`${refresh ? ()=>handleLogout() : ""}`} type="button" className="btn btn-link px-3 me-2">
-          {refresh ? "Logout" : "Login"}
+        {
+          refresh ? <Link to="/">
+          <button onClick={()=>handleLogout()} type="button" className="btn btn-link px-3 me-2">
+            Logout
+          </button>
+        </Link> :
+        <Link to="/login">
+        <button  type="button" className="btn btn-link px-3 me-2">
+          Login
         </button>
       </Link>
+        }
+      
         <Link to="/signup">
         <button type="button" className="btn btn-primary me-3">
           Sign up

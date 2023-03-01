@@ -119,3 +119,8 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(
+        style={"input_type": "password"}, write_only=True)
+

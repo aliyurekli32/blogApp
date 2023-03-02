@@ -9,7 +9,11 @@ class JWTHttpOnlyCookieMiddleware:
         url = request.build_absolute_uri(request.path)
         access=request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
         refresh=request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'])
-        if url=="http://127.0.0.1:8000/auth/login/" or url=="http://127.0.0.1:8000/auth/register/":
+        if url=="http://127.0.0.1:8000/auth/reset/":
+            response = self.get_response(request)
+            return response
+            
+        elif url=="http://127.0.0.1:8000/auth/login/" or url=="http://127.0.0.1:8000/auth/register/":
             response = self.get_response(request)
             return response
         elif url=="http://127.0.0.1:8000/auth/login/refresh/":

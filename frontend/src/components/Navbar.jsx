@@ -8,10 +8,10 @@ const Navbar = () => {
   const handleLogout=async()=>{
       await fetch("http://127.0.0.1:8000/auth/logout_all/",{
         method: "POST",
+        credentials: 'include',
         headers: 
         {
           "Content-type": "application/json; charset=UTF-8",
-          "Authorization": `Bearer ${access}`
         },
         body:JSON.stringify({
           "refresh": refresh,

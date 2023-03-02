@@ -70,17 +70,17 @@ const Card = (props) => {
            
             <div className='d-flex justify-content-between align-items-center mt-4'>
               <div>
-                <i  onClick={()=>senT()} class="cursor fas fa-thumbs-up fa-lg text-danger me-1"></i>
+                <i  onClick={()=>senT()} className="cursor fas fa-thumbs-up fa-lg text-danger me-1"></i>
                 <span>{post.likes}</span>
                 </div>
               <div className='d-flex justify-content-between align-items-center gap-2' >
               <div>
-                <i class="far fa-comment fa-lg text-danger me-1"></i>
+                <i className="far fa-comment fa-lg text-danger me-1"></i>
                 <span>{post.comment_count}</span> 
               </div>
               
               <div>
-                <i class="far fa-eye fa-lg text-danger me-1"></i>
+                <i className="far fa-eye fa-lg text-danger me-1"></i>
                 <span>{post.post_views}</span>
               </div>
               </div>

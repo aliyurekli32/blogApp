@@ -11,7 +11,7 @@ export const fetchLoginRegister=async(data,type)=>{
      
     // Adding method type
     method: type!=="update" ? "POST" : "PUT",
-     
+    credentials: "include",
     // Adding body or contents to send
     body: type=="login" ? JSON.stringify({
         "username": data.username,
@@ -34,14 +34,9 @@ export const fetchLoginRegister=async(data,type)=>{
     // Adding headers to the request
    
     
-    headers: type !=="update" ? {
-        "Content-type": "application/json; charset=UTF-8"
-    } 
-    : 
-    {
+    headers: {
         "Content-type": "application/json; charset=UTF-8",
-        "Authorization": `Bearer ${data.access}`
-    }
+    } 
     
 })
  
@@ -67,9 +62,10 @@ if(type=="login" || type=="update" ) return accessData;
 export const fetchUser=async(a)=>{
     try {
       const userData= await fetch("http://127.0.0.1:8000/auth/user/",{
+        credentials: "include",
         headers: {
             "Content-type": "application/json; charset=UTF-8",
-            "Authorization": `Bearer ${a.access}`
+
         }
     }).then(response=>response.json());
     console.log(userData)
@@ -87,6 +83,7 @@ export const passUpdate=async(data)=>{
         await fetch(`http://127.0.0.1:8000/auth/change_password/${data?.id}/`,
         {
             method: "PUT",
+            credentials: "include",
             body: JSON.stringify({
                 "old_password": data.old_password,
                 "password": data.password,
@@ -94,7 +91,7 @@ export const passUpdate=async(data)=>{
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": `Bearer ${data.access}`
+                // "Authorization": `Bearer ${data.access}`
             }
 
         }
@@ -106,7 +103,10 @@ export const passUpdate=async(data)=>{
 
 export const getCategory=async()=>{
     try {
-     const data =await fetch("http://127.0.0.1:8000/api/categories/").then(res=>res.json()).then(data=>data)
+     const data =await fetch("http://127.0.0.1:8000/api/categories/",{
+        method: "GET",
+        credentials: "include",
+     }).then(res=>res.json()).then(data=>data)
      return data
     } catch (error) {
         console.log(error)
@@ -121,10 +121,11 @@ export const createBlog=async(data)=>{
     try {
       const dataBlog=  await fetch(url,{
             method: "POST",
+            credentials: "include",
             body: JSON.stringify(data),
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": `Bearer ${data.access}`
+
             }
         }).then(res=>res.json()).then(data=>console.log(data));
         return dataBlog
@@ -135,13 +136,18 @@ export const createBlog=async(data)=>{
     
 }
 export const getBlog=async()=>{
-  const data=  await fetch("http://127.0.0.1:8000/api/blogs/").then(res=>res.json()).then(data=>data);
+  const data=  await fetch("http://127.0.0.1:8000/api/blogs/",{
+    method: "GET",
+    credentials: "include",
+  }
+  ).then(res=>res.json()).then(data=>data);
   return data
 }
 
 export const postView=async(data)=>{
     await fetch("http://127.0.0.1:8000/api/post_views/",{
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({
             "post_views": true,
             "user_id": data.user_id,
@@ -150,7 +156,7 @@ export const postView=async(data)=>{
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8",
-            "Authorization": `Bearer ${data.access}`
+
         }
 
     })
@@ -164,6 +170,7 @@ export const sendLikeOrDelete=async(data)=>{
     if (!data?.likes_id){
         const datal=await fetch(urlLike,{
             method: "POST" ,
+            credentials: "include",
             body: 
              JSON.stringify({
                 "user_id": data.user_id,
@@ -173,7 +180,7 @@ export const sendLikeOrDelete=async(data)=>{
             ,
             headers:  {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": `Bearer ${data.access}`
+
             }
         }).then(res=>res.json()).then(dataL=>console.log(dataL))
     
@@ -181,9 +188,10 @@ export const sendLikeOrDelete=async(data)=>{
     }else{
         await fetch(urlLikeDelete,{
             method: "DELETE",
+            credentials: "include",
             headers:  {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": `Bearer ${data.access}`
+
             }
         })
     }
@@ -195,6 +203,7 @@ export const sendComment=async(data)=>{
 
     await fetch("http://127.0.0.1:8000/api/comments/",{
         method: "POST",
+        credentials: "include",
         body:JSON.stringify({
             "content": data.comment,
            " user_id": data.user_id,
@@ -202,7 +211,7 @@ export const sendComment=async(data)=>{
         }),
         headers:{
             "Content-type": "application/json; charset=UTF-8",
-            "Authorization": `Bearer ${data.access}`
+
         }
     })
 
@@ -222,3 +231,18 @@ export const formatDate =(dateString)=> {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     return `${formattedDay}-${formattedMonth}-${formattedYear} ${formattedHours}:${formattedMinutes}`;
   } 
+
+export const  getCookie=()=> {
+    const cookieObj = {};
+    // Split the cookie string into an array of individual cookies
+    const cookies = document.cookie.split(';')
+    cookies.forEach(cookie => {
+        const [name, value] = cookie.split('=');
+        cookieObj[name.trim()] = decodeURIComponent(value);
+      });
+      
+    console.log(cookies)
+   console.log(decodeURIComponent(cookies)) ;
+   console.log(cookieObj) ;
+
+  }

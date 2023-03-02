@@ -1,5 +1,7 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.contrib.auth import authenticate
+from django.conf import settings
+from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken,BlacklistedToken,OutstandingToken
@@ -7,13 +9,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.middleware import csrf
 # Create your views here.
+from rest_framework_simplejwt import tokens, views as jwt_views, serializers as jwt_serializers, exceptions as jwt_exceptions
 from rest_framework.permissions import AllowAny
 from .models import User
-from .serializers import RegisterSerializer,ChangePasswordSerializer,UpdateUserSerializer
+from .serializers import RegisterSerializer,ChangePasswordSerializer,UpdateUserSerializer,LoginSerializer
 from rest_framework import generics
-from rest_framework_simplejwt.views import TokenObtainPairView
 from datetime import timedelta
-from django.conf import settings
+from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions
 
 
 
@@ -27,38 +29,102 @@ def get_user_tokens(user):
         'refresh_token': str(refresh),
     }
 
+###?????LOGİN VİEW###????????
+
+@rest_decorators.api_view(["POST"])
+@rest_decorators.permission_classes([])
+def loginView(request):
+    serializer = LoginSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    username = serializer.validated_data["username"]
+    password = serializer.validated_data["password"]
+
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        tokens = get_user_tokens(user)
+        res = response.Response({"message": f"User {username} logged in succesfully"})
+        res.set_cookie(
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=tokens["access_token"],
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+        )
+
+        res.set_cookie(
+            key=settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'],
+            value=tokens["refresh_token"],
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+        )
 
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
+        res["X-CSRFToken"] = csrf.get_token(request)
+        return res
+    raise rest_exceptions.AuthenticationFailed(
+        "Email or Password is incorrect!")
+    
+####???????#############
 
-        if response.status_code == 200:
-            tokens = get_user_tokens(request.user)
-            res = response.Response()
-            res.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value=tokens["access_token"],
-                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
-            )
+###!!!!!!REFRESH##!!!!!!
+class CookieTokenRefreshSerializer(jwt_serializers.TokenRefreshSerializer):
+    refresh = None
 
-            res.set_cookie(
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh')
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise jwt_exceptions.InvalidToken(
+                'No valid token found in cookie \'refresh\'')
+
+
+class CookieTokenRefreshView(jwt_views.TokenRefreshView):
+    serializer_class = CookieTokenRefreshSerializer
+
+    def finalize_response(self, request, response, *args, **kwargs):
+
+        if response.data.get("refresh"):
+            response.set_cookie(
                 key=settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'],
-                value=tokens["refresh_token"],
+                value=response.data['refresh'],
                 expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
                 secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
                 samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
 
-            res.data = {
-                "message": "refresh and access tokens created "
-            }
+        if 'access'  in response.data:
+            response.set_cookie(
+                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+                value=response.data["access"],
+                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
+                )
+            del response.data["access"]
 
-            return res 
+            
+        
+        response["X-CSRFToken"] = request.COOKIES.get("csrftoken")
+        return super().finalize_response(request, response, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+###!!!???????!REFRESH
+
 
             
 
@@ -93,14 +159,21 @@ class UpdateProfileView(generics.UpdateAPIView):
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
-
     def post(self, request):
-        try:
+        try: 
             refresh_token = request.data["refresh"]
             token = RefreshToken(refresh_token)
             token.blacklist()
-
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            res =Response(status=status.HTTP_205_RESET_CONTENT)
+           
+            
+            res.delete_cookie('access', path='/', domain=None,samesite="None")
+            res.delete_cookie('refresh', path='/', domain=None,samesite="None")
+            res.delete_cookie("X-CSRFToken")
+            res.delete_cookie("csrftoken")
+            res["X-CSRFToken"]=None
+            
+            return res
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,12 +182,22 @@ class LogoutAllView(APIView):
     permission_classes = (IsAuthenticated,)
     
     def post(self, request):
+        refresh_token = request.data["refresh"]
+        token = RefreshToken(refresh_token)
+        token.blacklist()
+        res = Response(status=status.HTTP_205_RESET_CONTENT)
+        res.delete_cookie('access', path='/', domain=None,samesite="None")
+        res.delete_cookie('refresh', path='/', domain=None,samesite="None")
+        res.delete_cookie("X-CSRFToken")
+        res.delete_cookie("csrftoken")
+        res["X-CSRFToken"]=None
+            
         tokens = OutstandingToken.objects.filter(user_id=request.user.id)
         for token in tokens:
             t, _ = BlacklistedToken.objects.get_or_create(token=token)
         BlacklistedToken.objects.filter(token__expires_at__lt=datetime.now()).delete()
         OutstandingToken.objects.filter(expires_at__lt=datetime.now()).delete()
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+        return res
     
 
 class ProfileUser(generics.ListAPIView):
@@ -122,3 +205,19 @@ class ProfileUser(generics.ListAPIView):
     serializer_class = UpdateUserSerializer
     def get_queryset(self):                                            # added string
         return super().get_queryset().filter(pk=self.request.user.pk)   # added string
+
+
+
+class ResetView(APIView):
+    def post(self, request):
+        if ('access' or 'refresh') not in request.data:
+            res = Response(status=status.HTTP_205_RESET_CONTENT)
+            res.delete_cookie('access', path='/', domain=None,samesite="None")
+            res.delete_cookie('refresh', path='/', domain=None,samesite="None")
+            res.delete_cookie("X-CSRFToken")
+            res.delete_cookie("csrftoken")
+            res["X-CSRFToken"]=None
+            
+        BlacklistedToken.objects.filter(token__expires_at__lt=datetime.now()).delete()
+        OutstandingToken.objects.filter(expires_at__lt=datetime.now()).delete()
+        return res

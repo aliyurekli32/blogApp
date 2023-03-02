@@ -1,7 +1,9 @@
 from django.db import models
+
 from account.models import User
+
 from django.utils.text import slugify
-# Create your models here.
+
 class Category(models.Model):
 
     name = models.CharField(max_length = 25)
@@ -26,13 +28,15 @@ class Blog(models.Model):
     # comments readOnly: true
     # category_name readOnly: true
     # likes readOnly: true
-    # post_views = models.IntegerField(default = 0) # readOnly: true
+    # post_views readOnly: true
     # comment_count readOnly: true
     # likes_n readOnly: true
 
     def __str__(self):
         return self.title
 
+    #! Title a uygun bir slug oluşturmamızı sağlar:
+    #! It allows us to create a slug suitable for the title:
     def save(self, *args, **kwargs):
         if not self.slug:
             slug_sample = slugify(self.title)
@@ -58,3 +62,4 @@ class PostViews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = 'user_post_views')
     post_views = models.BooleanField(default = False)
     post = models.ForeignKey(Blog, on_delete=models.CASCADE,related_name='post_views')
+    time_stamp = models.DateTimeField(auto_now_add=True)

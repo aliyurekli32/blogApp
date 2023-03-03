@@ -1,13 +1,16 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
+import { logoutUser } from '../store/slices/userSlice'
 
 const Navbar = () => {
+  const dispatch=useDispatch()
   const {refresh,access}=useSelector(state=>state.user)
   const {auth}=useAuth()
   const handleLogout=async()=>{
     const a=await auth('logout')
+     dispatch(logoutUser())
       // await fetch("http://127.0.0.1:8000/auth/logout_all/",{
       //   method: "POST",
       //   credentials: 'include',
@@ -21,11 +24,10 @@ const Navbar = () => {
 
       // });
       // console.log("logout çalıştı")
-    console.log(a)
   }
 
 
-
+  console.log(refresh)
   return (
     <>
     {/* Navbar */}

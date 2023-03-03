@@ -23,8 +23,8 @@ const Login = () => {
   const handleLogin =async()=>{
       await auth("login",loginData);
      const user= await getData('auth/user');
-     console.log(user)
-     dispatch(getUser(user[0]))
+
+     dispatch(getUser({...user[0],refresh:true}))
      navigate("/")
   }
 

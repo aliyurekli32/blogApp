@@ -2,24 +2,22 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { passUpdate } from '../helper/Functions'
 import { useNavigate } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
 
 const PasswordUpdate = () => {
-  const {id,access}=useSelector(state=>state.user)
+  const {auth}=useAuth()
+  const {id}=useSelector(state=>state.user)
   const navigate=useNavigate()
   const [passData,setPassData]=useState({
-    access: access,
-    id: id,
     old_password:"",
     password:"",
     password2:"",
   })
 
  const handleChangePass = async()=>{
-      await passUpdate(passData);
+      await auth("change_password",passData,id);
       navigate("/")
       setPassData({
-        access: access,
-        id: id,
         old_password:"",
         password:"",
         password2:"",
@@ -48,8 +46,8 @@ const PasswordUpdate = () => {
     </div>
     <button onClick={()=>handleChangePass()}  className="btn btn-primary w-100">Reset password</button>
     <div className="d-flex justify-content-between mt-4">
-      <a className href="#">Login</a>
-      <a className href="#">Register</a>
+      <a  href="#">Login</a>
+      <a  href="#">Register</a>
     </div>
   </div>
 </div>

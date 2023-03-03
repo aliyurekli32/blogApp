@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../store/slices/userSlice';
 
 
 
@@ -8,7 +10,7 @@ const API_URL = 'http://127.0.0.1:8000/auth';
 const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const dispatch=useDispatch()
   const authRequest = async (endpoint, method, body) => {
     setIsLoading(true);
     try {
@@ -19,12 +21,15 @@ const useAuth = () => {
           "Content-type": "application/json; charset=UTF-8",
 
         },
-        body: body ? JSON.stringify(body) : undefined
+        body: body ? JSON.stringify(body) : JSON.stringify({})
       });
       if(response.status==401){
         return auth('reset')
       }else if(endpoint=="reset"){
+        dispatch(logoutUser())
         window.history.pushState({}, '', '/');
+      }else if(endpoint=="login/refresh" && response.status==200){
+        window.history.pushState({}, '', '/')
       }
 
       if (!response.ok) {
@@ -49,15 +54,15 @@ const useAuth = () => {
       case 'login':
         return await authRequest('login', 'POST', data);
       case 'refresh':
-        return await authRequest('login/refresh', 'POST');
+        return await authRequest('login/refresh', 'POST',"");
       case 'reset':
-        await authRequest('reset', 'POST');
+        await authRequest('reset', 'POST',"");
         return;
       case 'logout':
-        await authRequest('logout', 'POST');
+        await authRequest('logout', 'POST',"");
         return;
       case 'logout_all':
-        await authRequest('logout_all', 'POST');
+        await authRequest('logout_all', 'POST',"");
         return;  
       case 'register':
         return await authRequest('register', 'POST', data);

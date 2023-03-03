@@ -4,6 +4,7 @@ const userSlice=createSlice({
     name: "user",
     initialState: {
         id:"",
+        refresh: false,
         username:"",
         first_name:"",
         last_name:"",
@@ -16,6 +17,7 @@ const userSlice=createSlice({
     reducers:{
         getUser: (state,action)=>{
             state.id=action.payload?.id || state.id
+            state.refresh=action.payload?.refresh || state.refresh
             state.username=action.payload?.username || state.username
             state.first_name=action.payload?.first_name || state.first_name
             state.last_name=action.payload?.last_name || state.last_name
@@ -27,6 +29,7 @@ const userSlice=createSlice({
         },
         logoutUser: (state)=>{
             state.id=""
+            state.refresh=false
             state.username=""
             state.first_name=""
             state.last_name=""

@@ -13,7 +13,7 @@ const Home = () => {
  const [posts,setPosts]=useState([])
  const {action}=useSelector(state=>state.user)
   useEffect(()=>{
-   getData("api/blogs").then(data=>{
+   getData("api/blogs","").then(data=>{
     if(data==401){
       return auth('refresh')
     }

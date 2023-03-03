@@ -5,6 +5,7 @@ import useAuth from "./useAuth";
 const useApi=()=>{
   const {auth}=useAuth()
   const makeRequest = async(method, data,url,id) => {
+    console.log(url)
     const urlApi= id ? `http://127.0.0.1:8000/${url}/${id}/` : `http://127.0.0.1:8000/${url}/`;
     const options = {
       method,
@@ -25,11 +26,12 @@ const useApi=()=>{
   }
 
   const getData = async(url,id) => {
-   return  await makeRequest('GET',url,id)
+
+   return  await makeRequest('GET',"",url,id)
   }
 
   const postData = async(data,url) => {
-   return await makeRequest('POST', data,url,id)
+   return await makeRequest('POST', data,url)
 
   }
 
@@ -44,7 +46,7 @@ const useApi=()=>{
   }
 
   const deleteData = async(url,id) => {
-   return await makeRequest('DELETE',url,id)
+   return await makeRequest('DELETE',"",url,id)
 
   }
   // useEffect(()=>{},[dataF])

@@ -4,8 +4,6 @@ const userSlice=createSlice({
     name: "user",
     initialState: {
         id:"",
-        refresh:"",
-        access:"",
         username:"",
         first_name:"",
         last_name:"",
@@ -19,8 +17,6 @@ const userSlice=createSlice({
         getUser: (state,action)=>{
             state.id=action.payload?.id || state.id
             state.username=action.payload?.username || state.username
-            state.access=action.payload?.access || state.access
-            state.refresh=action.payload?.refresh || state.refresh
             state.first_name=action.payload?.first_name || state.first_name
             state.last_name=action.payload?.last_name || state.last_name
             state.email=action.payload?.email || state.email
@@ -32,8 +28,6 @@ const userSlice=createSlice({
         logoutUser: (state)=>{
             state.id=""
             state.username=""
-            state.access=""
-            state.refresh=""
             state.first_name=""
             state.last_name=""
             state.email=""

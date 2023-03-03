@@ -11,9 +11,12 @@ import PasswordUpdate from '../pages/PasswordUpdate'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CreateBlogCard from '../pages/CreateBlogCard'
+import useApi from '../hooks/useApi'
+import useAuth from '../hooks/useAuth'
 
 
-const AppRouter = () => {
+const AppRouter = ({navigate}) => {
+
   return (
     <>
     <Navbar/>

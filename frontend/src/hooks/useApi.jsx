@@ -11,7 +11,7 @@ const useApi=()=>{
       method,
       credentials:"include",
       headers: { "Content-type": "application/json; charset=UTF-8" },
-      ...((method!=='GET' && method!=='DELETE')&&{body:JSON.stringify(data) || undefined})
+      ...((method!=='GET' && method!=='DELETE')&&{body:JSON.stringify(data || {})})
     };
       try {
        const response=await fetch(urlApi, options)

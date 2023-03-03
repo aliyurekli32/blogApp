@@ -24,7 +24,7 @@ const Login = () => {
       await auth("login",loginData);
      const user= await getData('auth/user');
 
-     dispatch(getUser({...user[0],refresh:true}))
+     user[0].id && dispatch(getUser({...user[0],refresh:true}))
      navigate("/")
   }
 

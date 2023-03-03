@@ -1,17 +1,16 @@
 import { useState } from "react"
-import { fetchLoginRegister } from "../helper/Functions"
 import { useDispatch, useSelector } from "react-redux"
 import { getUser } from "../store/slices/userSlice"
 import { useNavigate } from "react-router-dom"
+import useApi from "../hooks/useApi"
 
 
 const UserUpdate = () => {
+  const {putData}=useApi()
   const userData=useSelector(state=>state.user)
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const [signUpData, setSignUpData]=useState({
-    access: userData.access,
-    id: userData.id,
     username: userData.username,
     email: userData.email,
     first_name: userData.first_name,
@@ -21,7 +20,7 @@ const UserUpdate = () => {
     })
 
     const handleUpdate=async()=>{
-      const a = await fetchLoginRegister(signUpData,"update");
+      const a = await putData(signUpData,"auth/update_profile",userData.id);
       dispatch(getUser(a));
       navigate("/")
     }

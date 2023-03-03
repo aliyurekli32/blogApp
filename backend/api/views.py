@@ -80,7 +80,7 @@ class LikesView(ModelViewSet):
         data = {
             "message":"Likes successfully deleted"
         }
-        return Response(data,status=status.HTTP_204_NO_CONTENT)
+        return Response(data)
 
     def perform_destroy(self, instance):
         instance.delete()

@@ -63,7 +63,7 @@ def loginView(request):
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
         )
 
-
+        
         res["X-CSRFToken"] = csrf.get_token(request)
         return res
     raise rest_exceptions.AuthenticationFailed(

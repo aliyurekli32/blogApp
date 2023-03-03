@@ -26,9 +26,11 @@ const useAuth = () => {
       if(response.status==401){
         return auth('reset')
       }else if(endpoint=="reset"){
+        console.log(endpoint)
         dispatch(logoutUser())
-        window.history.pushState({}, '', '/');
+        window.location.href('http://localhost:3000/');
       }else if(endpoint=="login/refresh" && response.status==200){
+        console.log('200 refresh')
         window.history.pushState({}, '', '/')
       }
 

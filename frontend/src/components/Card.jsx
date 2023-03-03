@@ -3,9 +3,10 @@ import { postView, sendLikeOrDelete } from '../helper/Functions'
 import { useDispatch, useSelector } from 'react-redux'
 import { actionGet } from '../store/slices/userSlice'
 import { Link } from 'react-router-dom'
+import useApi from '../hooks/useApi'
 
 const Card = (props) => {
-    
+    const {deleteData,postData}=useApi()
    
     const {post}=props
     const {id,access}=useSelector(state=> state.user)
@@ -13,23 +14,30 @@ const Card = (props) => {
  
 
   const senT=async()=>{
-
-   if(post.likes_n.filter(item=> item.user_id==id).length){
-    console.log(post?.likes_n?.filter(item=> item.user_id==id)[0]?.id)
-    await sendLikeOrDelete({
-      likes_id: post?.likes_n?.filter(item=> item.user_id==id)[0]?.id,
-      access: access
-    }).then(res=>res)
+   const like=post?.likes_n?.filter(item=> item.user_id==id)
+   const data={
+    likes: true,
+    post_id: post.id,
+    user_id: id
+  }
+   if(like.length)
+   {
+   await deleteData("api/likes",like[0]?.id) 
+    // await sendLikeOrDelete({
+    //   likes_id: like[0]?.id,
+    //   access: access
+    // }).then(res=>res)
     dispatch(actionGet())
     
    }else{
-    console.log('filternone')
-    await sendLikeOrDelete({
-      likes: true,
-      post_id: post.id,
-      user_id: id,
-      access: access
-    }).then(res=>res)
+    await postData(data,"api/likes")
+
+    // await sendLikeOrDelete({
+    //   likes: true,
+    //   post_id: post.id,
+    //   user_id: id,
+    //   access: access
+    // }).then(res=>res)
     dispatch(actionGet())
     
 
@@ -37,12 +45,12 @@ const Card = (props) => {
       
   } 
   const dataView={
-    access: access,
+    post_views:true,
     user_id: id,
     post_id: post.id
   }
   const handleView=async()=>{
-      await postView(dataView).then(res=>res)
+      await postData(dataView,'api/post_views').then(res=>res)
       dispatch(actionGet())
   }
   return (

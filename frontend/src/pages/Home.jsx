@@ -14,8 +14,8 @@ const Home = () => {
  const {action}=useSelector(state=>state.user)
   useEffect(()=>{
    getData("api/blogs","").then(data=>{
-    if(data==401){
-      return auth('refresh')
+    if(data == undefined || typeof data == 'object' || data == null){
+      return getData("api/blogs","").then(data=>setPosts(data))
     }
     setPosts(data)})
   },[action])

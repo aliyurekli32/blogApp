@@ -16,8 +16,9 @@ const useApi=()=>{
       try {
        const response=await fetch(urlApi, options)
        if(response.status=="401"){
-        return auth("refresh")
+       return auth("refresh")
        }
+       console.log(response)
        const res=await response.json()
        return res
       } catch (error) {

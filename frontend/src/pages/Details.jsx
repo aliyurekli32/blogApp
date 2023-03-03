@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { formatDate, sendComment, sendLikeOrDelete } from '../helper/Functions'
 import { actionGet } from '../store/slices/userSlice'
+import useApi from '../hooks/useApi'
 
 const Details = () => {
+  const {getData}=useApi()
   const [post,setPost]=useState({})
   const [showComment,setShowComment]=useState(false)
   const [comment,setComment]=useState("")
@@ -15,19 +17,19 @@ const params=useParams()
 console.log(params)
 
 
-const getBlog=async()=>{
-await fetch(`http://127.0.0.1:8000/api/blogs/${params.id}/`,{
-  method: "GET",
-  headers: {
-    "Content-type": "application/json; charset=UTF-8",
-    "Authorization": `Bearer ${access}`
-}
-}).then(res=>res.json()).then(data=>setPost(data))
-}
+// const getBlog=async()=>{
+// await fetch(`http://127.0.0.1:8000/api/blogs/${params.id}/`,{
+//   method: "GET",
+//   headers: {
+//     "Content-type": "application/json; charset=UTF-8",
+
+// }
+// }).then(res=>res.json()).then(data=>setPost(data))
+// }
 
 
   useEffect(()=>{
-    getBlog()
+    getData("api/blogs", params.id).then(data=>setPost(data))
   },[action])
 
 

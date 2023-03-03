@@ -2,13 +2,22 @@ import React, { useEffect, useState } from 'react'
 import Card from '../components/Card';
 import { getBlog, getCookie } from '../helper/Functions';
 import { useSelector } from 'react-redux';
+import useApi from '../hooks/useApi';
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
+ const{getData}=useApi()
+ const{auth}=useAuth()
  const [posts,setPosts]=useState([])
  const {action}=useSelector(state=>state.user)
   useEffect(()=>{
-   getBlog().then(data=>setPosts(data || []))
-
+   getData("api/blogs").then(data=>{
+    if(data==401){
+      return auth('refresh')
+    }
+    setPosts(data)})
   },[action])
 
   const newAccess=async()=>{

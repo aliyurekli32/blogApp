@@ -12,9 +12,9 @@ auth("change_password",data,id)
 
 getData(url) main id
 deleteData(url) id
-postData(url) 
-putData(url) id
-patchData(url) id
+postData(data,url) 
+putData(data,url) id
+patchData(data,url) id
 
 
 

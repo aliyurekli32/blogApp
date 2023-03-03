@@ -50,7 +50,7 @@ const CreateBlogCard = () => {
                   <label className="form-label " htmlFor="typeTextX">Title</label>
         </div>
        
-        <select onChange={(e)=>setSelectedCat(e.target.value)} class="form-select" aria-label="Default select example">
+        <select onChange={(e)=>setSelectedCat(e.target.value)} className="form-select" aria-label="Default select example">
           {
             category.map(item=>{
               return(

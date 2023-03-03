@@ -3,10 +3,14 @@ import { fetchLoginRegister, fetchUser } from "../helper/Functions"
 import { useDispatch, useSelector } from "react-redux"
 import { getUser } from "../store/slices/userSlice"
 import { useNavigate } from "react-router-dom"
+import useAuth from "../hooks/useAuth"
+import useApi from "../hooks/useApi"
 
 
 
 const Login = () => {
+  const {error,auth}=useAuth()
+  const{getData}=useApi()
   const dispatch=useDispatch()
   const data=useSelector(state=>state.user)
   const navigate=useNavigate()
@@ -15,23 +19,17 @@ const Login = () => {
   username: "",
   password: ""
   })
-  
-  const handleLogin =async()=>{
-    const a =await fetchLoginRegister(loginData,"login");
-    const b = await fetchUser(a);
-    const c= {...a,...b[0]}
-   
-    dispatch(getUser(c))
-    setLoginData({
-      username: "",
-      password: ""
-    })
-    navigate("/")
 
+  const handleLogin =async()=>{
+      await auth("login",loginData);
+     const user= await getData('auth/user');
+     console.log(user)
+     dispatch(getUser(user[0]))
+     navigate("/")
   }
 
   
-
+console.log(data)
   return (
     <>
     <section className="vh-100 gradient-custom">

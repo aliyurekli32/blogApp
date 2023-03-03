@@ -1,25 +1,27 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
 
 const Navbar = () => {
   const {refresh,access}=useSelector(state=>state.user)
-
+  const {auth}=useAuth()
   const handleLogout=async()=>{
-      await fetch("http://127.0.0.1:8000/auth/logout_all/",{
-        method: "POST",
-        credentials: 'include',
-        headers: 
-        {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        body:JSON.stringify({
-          "refresh": refresh,
-       })
+    const a=await auth('logout')
+      // await fetch("http://127.0.0.1:8000/auth/logout_all/",{
+      //   method: "POST",
+      //   credentials: 'include',
+      //   headers: 
+      //   {
+      //     "Content-type": "application/json; charset=UTF-8",
+      //   },
+      //   body:JSON.stringify({
+      //     "refresh": refresh,
+      //  })
 
-      });
-      console.log("logout çalıştı")
-
+      // });
+      // console.log("logout çalıştı")
+    console.log(a)
   }
 
 

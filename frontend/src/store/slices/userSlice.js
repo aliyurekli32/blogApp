@@ -12,7 +12,9 @@ const userSlice=createSlice({
         bio:"",
         image:"",
         superA: false,
-        action: 0
+        action: 0,
+        accessExpire:"",
+        refreshExpire:"",
     },
     reducers:{
         getUser: (state,action)=>{
@@ -37,14 +39,23 @@ const userSlice=createSlice({
             state.bio=""
             state.image=""
             state.superA=false
+            state.accessExpire=""
+            state.refreshExpire=""
         },
         actionGet: (state)=>{
-            console.log(state.action)
+
             state.action = state.action + 1
         },
+        setTokTime: (state,action)=>{
+            state.accessExpire=action?.payload?.accessExpire || state.accessExpire
+            state.refreshExpire=action?.payload?.refreshExpire || state.refreshExpire
+        },
+        setAccess: (state,action)=>{
+            state.accessExpire=action?.payload?.accessExpire || state.accessExpire
+        }
     
     }
 })
 
-export const {actionGet,getUser,logoutUser}=userSlice.actions;
+export const {actionGet,getUser,logoutUser,setTokTime,setAccess}=userSlice.actions;
 export default userSlice.reducer;
